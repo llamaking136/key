@@ -1,3 +1,4 @@
 add <jem.jm>;
 out ("hello, world");
+in (hello);
 return (0);
