@@ -1,4 +1,4 @@
 add <jem.jm>; // unused, please remove
-out ("hello, world\n"); // prints hello world
+out ('hello, world\n'); // prints hello world
 //in (hello);
 return (0); // exits the compiler

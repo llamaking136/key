@@ -1,4 +1,4 @@
-#!/usr/bin/python3
+#!/usr/bin/env python3
 
 import os
 from sys import argv
@@ -52,6 +52,11 @@ if ext == "jem":
         i = 0
         error = 0
         tmp0 = 0
+        f = open("/tmp/0.cpp", "w")
+        f.write("#include <iostream>\n")
+        f.write("#include <stdlib.h>\n")
+        f.write("using namespace std;\n")
+        f.write("int main() {\n")
         while (i != len(content)):
             data = str(content[i])
             data = data.split()
@@ -73,6 +78,27 @@ if ext == "jem":
                             print("maybe you meant 'jem.jm'?")
                         print("\nTerminating compilation.\33[0m")
                         exit(-1)
+                if (data[0] == "out"):
+                    tmp2 = " ".join(data[1:])
+                    ii = 0
+                    tmp5 = list()
+                    if (tmp2[0] != "("):
+                        print("error")
+                        exit(-1)
+                    while (ii != len(tmp2)):
+                        tmp3 = tmp2[ii]
+                        tmp4 = "".join(tmp3[0])
+                        tmp5.append(tmp4)
+                        if (tmp3 == ";"):
+                            break
+                        ii+=1
+                    tmp5 = "".join(tmp5)
+                    tmp5 = tmp5.replace("(", "")
+                    tmp5 = tmp5.replace("\'", "\"")
+                    tmp5 = tmp5.replace(")", "")
+                    tmp5 = tmp5.replace(";", "")
+                    outdata = tmp5
+                    f.write("cout << " + outdata + ";\n")
             # print(data[0])
             if (data[0] not in stdlib):
                 if (data[0][0] == "/"):
@@ -85,3 +111,10 @@ if ext == "jem":
                     print("\nTerminating compilation.\33[0m")
                     exit(-1)
             i+=1
+        f.write("}")
+        f.close()
+        filename = path.replace(".jem", "")
+        os.system("g++ /tmp/0.cpp -o ./" + filename)
+        os.system("chmod +x ./" + filename)
+        os.remove("/tmp/0.cpp")
+        exit(0)
