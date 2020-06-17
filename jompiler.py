@@ -21,7 +21,7 @@ stdlib = [
     "add",
     "exit",
     "out",
-    "return",
+    "return"
 ]
 
 if len(argv) == 1:
@@ -55,6 +55,7 @@ if ext == "jem":
         f = open("/tmp/0.cpp", "w")
         f.write("#include <iostream>\n")
         f.write("#include <stdlib.h>\n")
+        f.write("#include <unistd.h>\n")
         f.write("using namespace std;\n")
         f.write("int main() {\n")
         while (i != len(content)):
@@ -77,6 +78,8 @@ if ext == "jem":
                         if (tmp1 == 1):
                             print("maybe you meant 'jem.jm'?")
                         print("\nTerminating compilation.\33[0m")
+                        f.close()
+                        os.remove("/tmp/0.cpp")
                         exit(-1)
                 if (data[0] == "out"):
                     tmp2 = " ".join(data[1:])
@@ -99,7 +102,12 @@ if ext == "jem":
                     tmp5 = tmp5.replace(";", "")
                     outdata = tmp5
                     f.write("cout << " + outdata + ";\n")
-            # print(data[0])
+                if (data[0] == "return"):
+                    value = data[1]
+                    f.write("return " + value + "\n")
+                if (data[0] == "exit"):
+                    value = data[1]
+                    f.write("exit" + value + "\n")
             if (data[0] not in stdlib):
                 if (data[0][0] == "/"):
                     pass
@@ -109,6 +117,8 @@ if ext == "jem":
                     print("\nline " + str(i + 1) + " - '" + " ".join(data) + "'")
                     print("func '" + data[0] + "' not defined")
                     print("\nTerminating compilation.\33[0m")
+                    f.close()
+                    os.remove("/tmp/0.cpp")
                     exit(-1)
             i+=1
         f.write("}")
@@ -116,5 +126,6 @@ if ext == "jem":
         filename = path.replace(".jem", "")
         os.system("g++ /tmp/0.cpp -o ./" + filename)
         os.system("chmod +x ./" + filename)
+        # os.system("cat /tmp/0.cpp")
         os.remove("/tmp/0.cpp")
         exit(0)
