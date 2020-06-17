@@ -1,4 +1,4 @@
-#!/usr/bin/python3
+#!/usr/bin/env python3
 
 import os
 from sys import argv
@@ -73,6 +73,26 @@ if ext == "jem":
                             print("maybe you meant 'jem.jm'?")
                         print("\nTerminating compilation.\33[0m")
                         exit(-1)
+                if (data[0] == "out"):
+                    tmp2 = " ".join(data[1:])
+                    ii = 0
+                    if (tmp2[0] != "("):
+                        print("error")
+                        exit(-1)
+                    while (ii != len(tmp2)):
+                        tmp3 = tmp2[ii]
+                        print(tmp3)
+                        #if (ii == 0):
+                        tmp4 = "".join(tmp3[0])
+                        tmp5 = list(tmp4)
+                        
+                        print(tmp5)
+
+                        if (tmp3 == ";"):
+                            break
+                        ii+=1
+                    tmp5 = "".join(tmp5)
+                    print(tmp5)
             # print(data[0])
             if (data[0] not in stdlib):
                 if (data[0][0] == "/"):
