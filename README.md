@@ -1,5 +1,5 @@
-# jem-compiler
-I'm making a programming language. I call it 'Jem'. Never seen the show, wasn't taken, bada-bang, bada-boom, here we are.
+# key
+I'm making a programming language. I'ts called 'Key'.
 
 Basically, I wanted a programming language like Python, but the compilabillity of C++.
 I tried compiling Python code, but it's just some kind of encryption, and it still requires the modules there.
