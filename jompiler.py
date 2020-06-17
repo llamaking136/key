@@ -75,7 +75,7 @@ if ext == "jem":
                         exit(-1)
             # print(data[0])
             if (data[0] not in stdlib):
-                if (data[0] == "//"):
+                if (data[0][0] == "/"):
                     pass
                 else:
                     error+=1
