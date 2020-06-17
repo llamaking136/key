@@ -1,5 +1,3 @@
-add <jem.jm>; // unused, please remove
-out ('hello, world\n'); // prints hello world
-// in (hello); function not yet implimented, still need variables first
-return (0); // exits the code
-// exit(0); exits the code
+out ("hello, world\n");
+// return (0);
+exit (0);

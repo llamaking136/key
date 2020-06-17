@@ -46,10 +46,10 @@ if check == False:
 name = path.split(".")
 tmp = name[::-1]
 ext = tmp[0]
-if ext != "jem":
-    print(f"[{tcol.red}ERROR{tcol.reset}]: file inputted is not a jem file!")
+if ext != "ky" or ext == "key":
+    print(f"[{tcol.red}ERROR{tcol.reset}]: file inputted is not a key file!")
     exit()
-if ext == "jem":
+if ext == "ky":
     with open(f"{path}", "r") as file:
         content = file.read().splitlines()
         i = 0
@@ -122,7 +122,8 @@ if ext == "jem":
             i+=1
         f.write("}")
         f.close()
-        filename = path.replace(".jem", "")
+        filename = path.replace(".ky", "")
+        # print(filename)
         os.system("g++ /tmp/0.cpp -o ./" + filename)
         os.system("chmod +x ./" + filename)
         # os.system("cat /tmp/0.cpp")
