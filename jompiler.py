@@ -17,15 +17,11 @@ class tcol:
     bold = '\033[1m'
     undl = '\033[4m'
 
-std = [
-    "add", 
-    "exit"
-]
 stdlib = [
-    "add"
-    "exit"
+    "add",
+    "exit",
     "out",
-    "return"
+    "return",
 ]
 
 if len(argv) == 1:
@@ -59,7 +55,8 @@ if ext == "jem":
         while (i != len(content)):
             data = str(content[i])
             data = data.split()
-            if (data[0] in std):
+            
+            if (data[0] in stdlib):
                 if (data[0] == "add"):
                     modadd = data[1].replace("<", "")
                     modadd = modadd.replace(">;", "")
@@ -76,9 +73,9 @@ if ext == "jem":
                             print("maybe you meant 'jem.jm'?")
                         print("\nTerminating compilation.\33[0m")
                         exit(-1)
-            
-            if (data[0] in stdlib):
-                if (tmp0 == 1):
+            # print(data[0])
+            if (data[0] not in stdlib):
+                if (data[0] == "//"):
                     pass
                 else:
                     error+=1
@@ -87,14 +84,4 @@ if ext == "jem":
                     print("func '" + data[0] + "' not defined")
                     print("\nTerminating compilation.\33[0m")
                     exit(-1)
-            if (data[0] not in std):
-                if (tmp0 == 1):
-                    pass
-                else:
-                    error+=1
-                    print("\33[31mTraceback (most recent call last):")
-                    print("\nline " + str(i + 1) + " - '" + " ".join(data) + "'")
-                    print("func '" + data[0] + "' not defined")
-                    print("\nTerminating compilation.\33[0m")
-                exit(-1)
             i+=1
