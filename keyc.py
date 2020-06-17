@@ -2,8 +2,11 @@
 
 import os
 from sys import argv
+
+version = "0.2.0"
+
 """
-Jem Compiler (Jompiler) Version 0.1.8
+Key Compiler (keyc) Version 0.2.0
 Copyright Daniel Smith 2020.
 Any replication of this work will be reported.
 All rights reserved.
@@ -25,13 +28,13 @@ stdlib = [
 ]
 
 if len(argv) == 1:
-    print("usage: jompile <filename>")
+    print("usage: keyc <filename>")
     exit()
 
 path = argv[1]
 
 if path == "--version" or path == "-v":
-    print(f"""{tcol.bold}Jem Compiler (Jompiler) Version 0.1.8
+    print(f"""{tcol.bold}Key Compiler (keyc) Version {version}
 Copyright Daniel Smith 2020.
 Any replication of this work will be reported.
 All rights reserved.{tcol.reset}""")
@@ -66,21 +69,17 @@ if ext == "jem":
                 if (data[0] == "add"):
                     modadd = data[1].replace("<", "")
                     modadd = modadd.replace(">;", "")
-                    if (modadd == "jem.jm"):
-                        tmp0 = 1
+                    """
                     else:
-                        if (modadd == "syn.jm"):
-                            tmp1 = 1
                         error+=1
                         print("\33[31mTraceback (most recent call last):")
                         print("\nline " + str(i + 1) + " - '" + " ".join(data) + "'")
                         print("module '" + modadd + "' not found")
-                        if (tmp1 == 1):
-                            print("maybe you meant 'jem.jm'?")
                         print("\nTerminating compilation.\33[0m")
                         f.close()
                         os.remove("/tmp/0.cpp")
                         exit(-1)
+                    """
                 if (data[0] == "out"):
                     tmp2 = " ".join(data[1:])
                     ii = 0
