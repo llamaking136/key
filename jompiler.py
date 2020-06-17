@@ -48,16 +48,32 @@ All rights reserved.{tcol.reset}""")
             content = file.read().splitlines()
             i = 0
             error = 0
+            tmp0 = 0
             while (i != len(content)):
                 data = str(content[i])
                 data = data.split()
                 if (data[0] in std):
-                    pass
-                elif (data[0] not in std):
+                    if (data[0] == "add"):
+                        modadd = data[1].replace("<", "")
+                        modadd = modadd.replace(">;", "")
+                        if (modadd == "jem.jm"):
+                            tmp0+=1
+                        else:
+                            if (modadd == "syn.jm"):
+                                tmp1 = 1
+                            error+=1
+                            print("\33[31mTraceback (most recent call last):")
+                            print("\nline " + str(i + 1) + " - '" + " ".join(data) + "'")
+                            print("module '" + modadd + "' not found")
+                            if (tmp1 == 1):
+                                print("maybe you meant 'jem.jm'?")
+                            print("\nTerminating compilation.\33[0m")
+                            exit(-1)
+                if (data[0] not in std or tmp0 != 1):
                     error+=1
                     print("\33[31mTraceback (most recent call last):")
                     print("\nline " + str(i + 1) + " - '" + " ".join(data) + "'")
-                    print("func " + data[0] + " not found")
+                    print("func '" + data[0] + "' not found")
                     print("\nTerminating compilation.\33[0m")
                     exit(-1)
                 i+=1
