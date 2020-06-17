@@ -1,0 +1,3 @@
+add [jem.jm];
+out ("hello, world");
+return (0);

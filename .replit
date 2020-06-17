@@ -1,0 +1,2 @@
+language = "python3"
+run = "chmod +x jompiler.py;./jompiler.py test.jem"
