@@ -4,7 +4,7 @@ import os
 from sys import argv
 """
 Jem Compiler (Jompiler) Version 0.1.8
-Copyright CBug 2020.
+Copyright Daniel Smith 2020.
 Any replication of this work will be reported.
 All rights reserved.
 """
@@ -17,14 +17,21 @@ class tcol:
     bold = '\033[1m'
     undl = '\033[4m'
 
-std = ["add", "out", "return"]
+std = ["add", "exit"]
+stdlib = [
+  "out",
+  "return"
+]
 
 if len(argv) == 1:
     print("usage: jompile <filename>")
     exit()
 def main(path):
-    if path == "version":
-        print(f"{tcol.bold}Jem Compiler (Jompiler) Version 0.1.8\nCopyright CBug 2020.\nAny replication of this work will be reported.\nAll rights reserved.{tcol.reset}")
+    if path == "--version" or path == "-v":
+        print(f"""{tcol.bold}Jem Compiler (Jompiler) Version 0.1.8
+Copyright Daniel Smith 2020.
+Any replication of this work will be reported.
+All rights reserved.{tcol.reset}""")
         exit()
     check = os.path.exists(path)
     if check == False:
