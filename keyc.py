@@ -26,12 +26,12 @@ stdlib = [
     "out",
     "return"
 ]
+path = argv[1]
+filename = path.replace(".ky", "")
 
 if len(argv) == 1:
     print("usage: keyc <filename>")
     exit()
-
-path = argv[1]
 
 if path == "--version" or path == "-v":
     print(f"""{tcol.bold}Key Compiler (keyc) Version {version}
@@ -41,13 +41,13 @@ All rights reserved.{tcol.reset}""")
     exit()
 check = os.path.exists(path)
 if check == False:
-    print(f"[{tcol.red}ERROR{tcol.reset}]: file inputted does not exist!")
+    print(f"[{tcol.red}{tcol.bold}ERROR{tcol.reset}]: file inputted does not exist!")
     exit()
 name = path.split(".")
 tmp = name[::-1]
 ext = tmp[0]
 if ext != "ky" or ext == "key":
-    print(f"[{tcol.red}ERROR{tcol.reset}]: file inputted is not a key file!")
+    print(f"[{tcol.red}{tcol.bold}ERROR{tcol.reset}]: file inputted is not a key file!")
     exit()
 if ext == "ky":
     with open(f"{path}", "r") as file:
@@ -80,6 +80,8 @@ if ext == "ky":
                         os.remove("/tmp/0.cpp")
                         exit(-1)
                     """
+                    if (modadd == "jem.jm" or modadd == "syn.jm" or modadd == "std.jm"):
+                        print(f"[{tcol.blue}{tcol.bold}WARNING{tcol.reset}]: line " +tcol.bold+ str(i + 1) +tcol.reset+ ", file " +tcol.bold+filename+".ky"+tcol.reset+ " - 'add <" + modadd + ">;' uneeded, but present")
                 if (data[0] == "out"):
                     tmp2 = " ".join(data[1:])
                     ii = 0
@@ -112,17 +114,15 @@ if ext == "ky":
                     pass
                 else:
                     error+=1
-                    print("\33[31mTraceback (most recent call last):")
-                    print("\nline " + str(i + 1) + " - '" + " ".join(data) + "'")
+                    print(f"[{tcol.bold}{tcol.red}ERROR{tcol.reset}]: line " +tcol.bold+ str(i + 1) +tcol.reset+ ", file " +tcol.bold+filename+".ky"+tcol.reset+ " - '" + " ".join(data) + "'")
                     print("func '" + data[0] + "' not defined")
-                    print("\nTerminating compilation.\33[0m")
+                    print("Terminating compilation.")
                     f.close()
                     os.remove("/tmp/0.cpp")
                     exit(-1)
             i+=1
         f.write("}")
         f.close()
-        filename = path.replace(".ky", "")
         # print(filename)
         os.system("g++ /tmp/0.cpp -o ./" + filename)
         os.system("chmod +x ./" + filename)

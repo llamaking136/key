@@ -2,7 +2,7 @@
 
 // Note - the func `add` is no longer used for importing the stdlib.
 
-#2 Current functions (that work):
+# Current functions (that work):
 
 `out` - Same thing as print, printf, and cout.
 `return` - Same thing as return.
