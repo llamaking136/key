@@ -81,7 +81,7 @@ if ext == "ky":
                         exit(-1)
                     """
                     if (modadd == "jem.jm" or modadd == "syn.jm" or modadd == "std.jm"):
-                        print(f"[{tcol.blue}{tcol.bold}WARNING{tcol.reset}]: line " +tcol.bold+ str(i + 1) +tcol.reset+ ", file " +tcol.bold+filename+".ky"+tcol.reset+ " - 'add <" + modadd + ">;' uneeded, but present")
+                        print(f"[{tcol.blue}{tcol.bold}WARNING{tcol.reset}]: line " +tcol.bold+ str(i + 1) +tcol.reset+ ", file " +tcol.bold+filename+".ky"+tcol.reset+ " - '\33[4madd <" + modadd + ">;\33[0m' uneeded, but present")
                 if (data[0] == "out"):
                     tmp2 = " ".join(data[1:])
                     ii = 0
@@ -114,7 +114,7 @@ if ext == "ky":
                     pass
                 else:
                     error+=1
-                    print(f"[{tcol.bold}{tcol.red}ERROR{tcol.reset}]: line " +tcol.bold+ str(i + 1) +tcol.reset+ ", file " +tcol.bold+filename+".ky"+tcol.reset+ " - '" + " ".join(data) + "'")
+                    print(f"[{tcol.bold}{tcol.red}ERROR{tcol.reset}]: line " +tcol.bold+ str(i + 1) +tcol.reset+ ", file " +tcol.bold+filename+".ky"+tcol.reset+ " - '\33[4m" + " ".join(data) + "\33[0m'")
                     print("func '" + data[0] + "' not defined")
                     print("Terminating compilation.")
                     f.close()
