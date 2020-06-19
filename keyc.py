@@ -146,6 +146,6 @@ if ext == "ky":
         # print(filename)
         os.system("g++ /tmp/0.cpp -o ./" + filename)
         os.system("chmod +x ./" + filename)
-        os.system("cat /tmp/0.cpp")
+        # os.system("cat /tmp/0.cpp")
         os.remove("/tmp/0.cpp")
         exit(0)
