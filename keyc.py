@@ -24,7 +24,9 @@ stdlib = [
     "add",
     "exit",
     "out",
-    "return"
+    "return",
+    "str",
+    "int"
 ]
 path = argv[1]
 filename = path.replace(".ky", "")
@@ -109,6 +111,24 @@ if ext == "ky":
                 if (data[0] == "exit"):
                     value = data[1]
                     f.write("exit" + value + "\n")
+                if (data[0] == "str"):
+                    strname = data[1]
+                    if (strname[-1] != ";"):
+                        pass
+                if (data[0] == "int"):
+                    intname = data[1]
+                    if (intname[-1] != ";"):
+                        intdata = data[3]
+                        if (";" not in intdata):
+                            error+=1
+                            print(f"[{tcol.bold}{tcol.red}ERROR{tcol.reset}]: line " +tcol.bold+ str(i + 1) +tcol.reset+ ", file " +tcol.bold+filename+".ky"+tcol.reset+ " - '\33[4m" + " ".join(data) + "\33[0m'")
+                            print("int '" + intname + "' without semicolon")
+                            print("Terminating compilation.")
+                            f.close()
+                            os.remove("/tmp/0.cpp")
+                            exit(-1)
+                        intdata = intdata.replace(";", "")
+                        f.write("int " + intname + " = " + intdata + ";\n")
             if (data[0] not in stdlib):
                 if (data[0][0] == "/"):
                     pass
@@ -126,6 +146,6 @@ if ext == "ky":
         # print(filename)
         os.system("g++ /tmp/0.cpp -o ./" + filename)
         os.system("chmod +x ./" + filename)
-        # os.system("cat /tmp/0.cpp")
+        os.system("cat /tmp/0.cpp")
         os.remove("/tmp/0.cpp")
         exit(0)

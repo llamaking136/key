@@ -1,4 +1,6 @@
 add <jem.jm>;
+// str hello = "hello, world\n";
+int hello = 21;
 out ("hello, world\n");
 // in (hello);
 // return (0);
