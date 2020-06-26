@@ -99,6 +99,13 @@ if ext == "ky":
                             break
                         ii+=1
                     tmp5 = "".join(tmp5)
+                    #if ("\'" not in tmp5 or "\"" not in tmp5):
+                    """
+                        error+=1
+                        print(f"[{tcol.bold}{tcol.red}ERROR{tcol.reset}]: line " +tcol.bold+ str(i + 1) +tcol.reset+ ", file " +tcol.bold+filename+".ky"+tcol.reset+ " - '\33[4m" + " ".join(data) + "\33[0m'")
+                        print("data '" + data[0] + "' not defined")
+                    """
+                    #else:
                     tmp5 = tmp5.replace("(", "")
                     tmp5 = tmp5.replace("\'", "\"")
                     tmp5 = tmp5.replace(")", "")
@@ -127,7 +134,12 @@ if ext == "ky":
                         f.write("int " + intname + " = " + intdata + ";\n")
             if (data[0] not in stdlib):
                 if (data[0][0] == "/"):
-                    pass
+                    if (data[0][1] == "/"):
+                        pass
+                    else:
+                        error+=1
+                        print(f"[{tcol.bold}{tcol.red}ERROR{tcol.reset}]: line " +tcol.bold+ str(i + 1) +tcol.reset+ ", file " +tcol.bold+filename+".ky"+tcol.reset+ " - '\33[4m" + " ".join(data) + "\33[0m'")
+                        print("func '" + data[0] + "' not defined")
                 else:
                     error+=1
                     print(f"[{tcol.bold}{tcol.red}ERROR{tcol.reset}]: line " +tcol.bold+ str(i + 1) +tcol.reset+ ", file " +tcol.bold+filename+".ky"+tcol.reset+ " - '\33[4m" + " ".join(data) + "\33[0m'")
