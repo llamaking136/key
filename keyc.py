@@ -123,10 +123,6 @@ if ext == "ky":
                             error+=1
                             print(f"[{tcol.bold}{tcol.red}ERROR{tcol.reset}]: line " +tcol.bold+ str(i + 1) +tcol.reset+ ", file " +tcol.bold+filename+".ky"+tcol.reset+ " - '\33[4m" + " ".join(data) + "\33[0m'")
                             print("int '" + intname + "' without semicolon")
-                            print("Terminating compilation.")
-                            f.close()
-                            os.remove("/tmp/0.cpp")
-                            exit(-1)
                         intdata = intdata.replace(";", "")
                         f.write("int " + intname + " = " + intdata + ";\n")
             if (data[0] not in stdlib):
@@ -136,14 +132,14 @@ if ext == "ky":
                     error+=1
                     print(f"[{tcol.bold}{tcol.red}ERROR{tcol.reset}]: line " +tcol.bold+ str(i + 1) +tcol.reset+ ", file " +tcol.bold+filename+".ky"+tcol.reset+ " - '\33[4m" + " ".join(data) + "\33[0m'")
                     print("func '" + data[0] + "' not defined")
-                    print("Terminating compilation.")
-                    f.close()
-                    os.remove("/tmp/0.cpp")
-                    exit(-1)
             i+=1
         f.write("}")
         f.close()
         # print(filename)
+        if (error >= 1):
+            print("Terminating compilation.")
+            os.remove("/tmp/0.cpp")
+            exit()
         os.system("g++ /tmp/0.cpp -o ./" + filename)
         os.system("chmod +x ./" + filename)
         # os.system("cat /tmp/0.cpp")
