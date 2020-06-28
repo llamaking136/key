@@ -25,13 +25,14 @@ stdlib = [
     "exit",
     "out",
     "return",
-    "str",
+    #"str",
     "int"
 ]
+
 path = argv[1]
 filename = path.replace(".ky", "")
 
-if len(argv) == 1:
+if len(argv) != 2:
     print("usage: keyc <filename>")
     exit()
 
@@ -82,7 +83,7 @@ if ext == "ky":
                         os.remove("/tmp/0.cpp")
                         exit(-1)
                     """
-                    if (modadd == "jem.jm" or modadd == "syn.jm" or modadd == "std.jm"):
+                    if (modadd == "syn.jm" or modadd == "std.jm"):
                         print(f"[{tcol.blue}{tcol.bold}WARNING{tcol.reset}]: line " +tcol.bold+ str(i + 1) +tcol.reset+ ", file " +tcol.bold+filename+".ky"+tcol.reset+ " - '\33[4madd <" + modadd + ">;\33[0m' uneeded, but present")
                 if (data[0] == "out"):
                     tmp2 = " ".join(data[1:])
