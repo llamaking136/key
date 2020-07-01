@@ -57,6 +57,7 @@ if ext == "ky":
         content = file.read().splitlines()
         i = 0
         error = 0
+        warning = 0
         tmp0 = 0
         f = open("/tmp/0.cpp", "w")
         f.write("#include <iostream>\n")
@@ -84,14 +85,18 @@ if ext == "ky":
                         exit(-1)
                     """
                     if (modadd == "syn.jm" or modadd == "std.jm"):
-                        print(f"[{tcol.blue}{tcol.bold}WARNING{tcol.reset}]: line " +tcol.bold+ str(i + 1) +tcol.reset+ ", file " +tcol.bold+filename+".ky"+tcol.reset+ " - '\33[4madd <" + modadd + ">;\33[0m' uneeded, but present")
+                        warning+=1
+                        print(f"[{tcol.blue}{tcol.bold}WARNING{tcol.reset}]: line " +tcol.bold+ str(i + 1) +tcol.reset+ ", file " +tcol.bold+filename+".ky"+tcol.reset+ " - '\33[4madd <" + modadd + ">;\33[0m'")
+                        print("adding syntax uneeded, but present")
                 if (data[0] == "out"):
                     tmp2 = " ".join(data[1:])
                     ii = 0
                     tmp5 = list()
                     if (tmp2[0] != "("):
-                        print("error")
-                        exit(-1)
+                        error+=1
+                        print(f"[{tcol.bold}{tcol.red}ERROR{tcol.reset}]: line " +tcol.bold+ str(i + 1) +tcol.reset+ ", file " +tcol.bold+filename+".ky"+tcol.reset+ " - '\33[4m" + " ".join(data) + "\33[0m'")
+                        print("parentheses are required")
+                        # exit(-1)
                     while (ii != len(tmp2)):
                         tmp3 = tmp2[ii]
                         tmp4 = "".join(tmp3[0])
@@ -149,8 +154,9 @@ if ext == "ky":
         f.write("}")
         f.close()
         # print(filename)
+        print(str(warning) + " warnings and " + str(error) + " errors.")
         if (error >= 1):
-            print("Terminating compilation.")
+            print(tcol.bold + "Terminating compilation." + tcol.reset)
             os.remove("/tmp/0.cpp")
             exit()
         os.system("g++ /tmp/0.cpp -o ./" + filename)
