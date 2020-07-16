@@ -1,4 +1,4 @@
-#!/usr/bin/env python3
+#!/usr/bin/python3
 
 import os
 from sys import argv
@@ -87,7 +87,7 @@ if ext == "ky":
                     if (modadd == "syn.jm" or modadd == "std.jm"):
                         warning+=1
                         print(f"[{tcol.blue}{tcol.bold}WARNING{tcol.reset}]: line " +tcol.bold+ str(i + 1) +tcol.reset+ ", file " +tcol.bold+filename+".ky"+tcol.reset+ " - '\33[4madd <" + modadd + ">;\33[0m'")
-                        print("adding syntax uneeded, but present")
+                        print("PackageAddingWarning: adding syntax uneeded, but present")
                 if (data[0] == "out"):
                     tmp2 = " ".join(data[1:])
                     ii = 0
@@ -95,7 +95,7 @@ if ext == "ky":
                     if (tmp2[0] != "("):
                         error+=1
                         print(f"[{tcol.bold}{tcol.red}ERROR{tcol.reset}]: line " +tcol.bold+ str(i + 1) +tcol.reset+ ", file " +tcol.bold+filename+".ky"+tcol.reset+ " - '\33[4m" + " ".join(data) + "\33[0m'")
-                        print("parentheses are required")
+                        print("SyntaxError: parentheses are required")
                         # exit(-1)
                     while (ii != len(tmp2)):
                         tmp3 = tmp2[ii]
@@ -119,11 +119,43 @@ if ext == "ky":
                     outdata = tmp5
                     f.write("cout << " + outdata + ";\n")
                 if (data[0] == "return"):
-                    value = data[1]
-                    f.write("return " + value + "\n")
+                    try:
+                        value = data[1]
+                        value = value.replace("(", "")
+                        value = value.replace(")", "")
+                        value = value.replace(";", "")
+                        value = int(value)
+                    except ValueError:
+                        error+=1
+                        print(f"[{tcol.bold}{tcol.red}ERROR{tcol.reset}]: line " +tcol.bold+ str(i + 1) +tcol.reset+ ", file " +tcol.bold+filename+".ky"+tcol.reset+ " - '\33[4m" + " ".join(data) + "\33[0m'")
+                        print(f"ValueError: type 'int' required, not {type(data[1])}")
+                    
+                    """
+                    if (type(value) != int):
+                        error+=1
+                        print(f"[{tcol.bold}{tcol.red}ERROR{tcol.reset}]: line " +tcol.bold+ str(i + 1) +tcol.reset+ ", file " +tcol.bold+filename+".ky"+tcol.reset+ " - '\33[4m" + " ".join(data) + "\33[0m'")
+                        print(f"ValueError: type 'int' required, not {type(data[1])}")
+                    """
+                    f.write("return " + str(data[1]) + "\n")
                 if (data[0] == "exit"):
-                    value = data[1]
-                    f.write("exit" + value + "\n")
+                    try:
+                        value = data[1]
+                        value = value.replace("(", "")
+                        value = value.replace(")", "")
+                        value = value.replace(";", "")
+                        value = int(value)
+                    except ValueError:
+                        error+=1
+                        print(f"[{tcol.bold}{tcol.red}ERROR{tcol.reset}]: line " +tcol.bold+ str(i + 1) +tcol.reset+ ", file " +tcol.bold+filename+".ky"+tcol.reset+ " - '\33[4m" + " ".join(data) + "\33[0m'")
+                        print(f"ValueError: type 'int' required, not {type(data[1])}")
+                    
+                    """
+                    if (type(value) != int):
+                        error+=1
+                        print(f"[{tcol.bold}{tcol.red}ERROR{tcol.reset}]: line " +tcol.bold+ str(i + 1) +tcol.reset+ ", file " +tcol.bold+filename+".ky"+tcol.reset+ " - '\33[4m" + " ".join(data) + "\33[0m'")
+                        print(f"ValueError: type 'int' required, not {type(data[1])}")
+                    """
+                    f.write("exit" + str(data[1]) + "\n")
                 if (data[0] == "str"):
                     strname = data[1]
                     if (strname[-1] != ";"):
@@ -135,7 +167,7 @@ if ext == "ky":
                         if (";" not in intdata):
                             error+=1
                             print(f"[{tcol.bold}{tcol.red}ERROR{tcol.reset}]: line " +tcol.bold+ str(i + 1) +tcol.reset+ ", file " +tcol.bold+filename+".ky"+tcol.reset+ " - '\33[4m" + " ".join(data) + "\33[0m'")
-                            print("int '" + intname + "' without semicolon")
+                            print("SyntaxError: int '" + intname + "' without semicolon")
                         intdata = intdata.replace(";", "")
                         f.write("int " + intname + " = " + intdata + ";\n")
             if (data[0] not in stdlib):
@@ -145,11 +177,11 @@ if ext == "ky":
                     else:
                         error+=1
                         print(f"[{tcol.bold}{tcol.red}ERROR{tcol.reset}]: line " +tcol.bold+ str(i + 1) +tcol.reset+ ", file " +tcol.bold+filename+".ky"+tcol.reset+ " - '\33[4m" + " ".join(data) + "\33[0m'")
-                        print("func '" + data[0] + "' not defined")
+                        print("FuncNotFoundError: func '" + data[0] + "' not defined")
                 else:
                     error+=1
                     print(f"[{tcol.bold}{tcol.red}ERROR{tcol.reset}]: line " +tcol.bold+ str(i + 1) +tcol.reset+ ", file " +tcol.bold+filename+".ky"+tcol.reset+ " - '\33[4m" + " ".join(data) + "\33[0m'")
-                    print("func '" + data[0] + "' not defined")
+                    print("FuncNotFoundError: func '" + data[0] + "' not defined")
             i+=1
         f.write("}")
         f.close()
