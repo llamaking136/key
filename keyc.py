@@ -3,10 +3,10 @@
 import os
 from sys import argv
 
-version = "0.2.0"
+version = open("VERSION.txt", "r").read()
 
-"""
-Key Compiler (keyc) Version 0.2.0
+f"""
+Key Compiler (keyc) Version {version}
 Copyright Daniel Smith 2020.
 Any replication of this work will be reported.
 All rights reserved.
