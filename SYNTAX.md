@@ -5,5 +5,5 @@
 # Current functions (that work):
 
 `out` - Same thing as print, printf, and cout.
-`return` - Same thing as return.
+`return` - Same thing as return. // Note - can only return numbers.
 `add` - Imports modules(does not work at date of writing)

@@ -3,9 +3,9 @@
 import os
 from sys import argv
 
-version = open("VERSION.txt", "r").read()
+version = "0.2.0"
 
-f"""
+about = f"""
 Key Compiler (keyc) Version {version}
 Copyright Daniel Smith 2020.
 Any replication of this work will be reported.
@@ -19,6 +19,26 @@ class tcol:
     reset = '\033[0m'
     bold = '\033[1m'
     undl = '\033[4m'
+
+errors = [
+    [
+        "ValueError",
+        "PackageAddingWarning",
+        "SyntaxError",
+        "FuncNotFoundError"
+    ],
+    [
+        "adding syntax uneeded, but present",
+        "parentheses are required",
+        ""
+    ]
+]
+
+def throwError(exception, exceptText, optionText = None):
+    if (optionText):
+        print(exception + ": " + exceptText + " " + optionText)
+    if (not optionText):
+        print(exception + ": " + exceptText + " error")
 
 stdlib = [
     "add",
@@ -52,8 +72,8 @@ ext = tmp[0]
 if ext != "ky" or ext == "key":
     print(f"[{tcol.red}{tcol.bold}ERROR{tcol.reset}]: file inputted is not a key file!")
     exit()
-if ext == "ky":
-    with open(f"{path}", "r") as file:
+if ext == "ky": # FIX
+    with open(f"{path}", "r") as file: # FIX
         content = file.read().splitlines()
         i = 0
         error = 0
@@ -71,8 +91,8 @@ if ext == "ky":
             
             if (data[0] in stdlib):
                 if (data[0] == "add"):
-                    modadd = data[1].replace("<", "")
-                    modadd = modadd.replace(">;", "")
+                    modadd = data[1].replace("<", "") # trying to find the package to import
+                    modadd = modadd.replace(">;", "") # trying to find the package to import
                     """
                     else:
                         error+=1
@@ -87,24 +107,24 @@ if ext == "ky":
                     if (modadd == "syn.jm" or modadd == "std.jm"):
                         warning+=1
                         print(f"[{tcol.blue}{tcol.bold}WARNING{tcol.reset}]: line " +tcol.bold+ str(i + 1) +tcol.reset+ ", file " +tcol.bold+filename+".ky"+tcol.reset+ " - '\33[4madd <" + modadd + ">;\33[0m'")
-                        print("PackageAddingWarning: adding syntax uneeded, but present")
+                        throwError(errors[0][0], errors[1][0], "warning")
                 if (data[0] == "out"):
-                    tmp2 = " ".join(data[1:])
+                    tmp2 = " ".join(data[1:]) # putting list into string to find data to print
                     ii = 0
                     tmp5 = list()
                     if (tmp2[0] != "("):
                         error+=1
                         print(f"[{tcol.bold}{tcol.red}ERROR{tcol.reset}]: line " +tcol.bold+ str(i + 1) +tcol.reset+ ", file " +tcol.bold+filename+".ky"+tcol.reset+ " - '\33[4m" + " ".join(data) + "\33[0m'")
-                        print("SyntaxError: parentheses are required")
+                        throwError(errors[0][2], errors[1][1])
                         # exit(-1)
-                    while (ii != len(tmp2)):
+                    while (ii != len(tmp2)): # continusly going through the data to find it all, thanks to the semicolon
                         tmp3 = tmp2[ii]
                         tmp4 = "".join(tmp3[0])
-                        tmp5.append(tmp4)
+                        tmp5.append(tmp4) # put the data into a string
                         if (tmp3 == ";"):
-                            break
+                            break # stops when it finds the semicolon
                         ii+=1
-                    tmp5 = "".join(tmp5)
+                    tmp5 = "".join(tmp5) # combine it all to turn it into a string
                     #if ("\'" not in tmp5 or "\"" not in tmp5):
                     """
                         error+=1
@@ -112,10 +132,10 @@ if ext == "ky":
                         print("data '" + data[0] + "' not defined")
                     """
                     #else:
-                    tmp5 = tmp5.replace("(", "")
-                    tmp5 = tmp5.replace("\'", "\"")
-                    tmp5 = tmp5.replace(")", "")
-                    tmp5 = tmp5.replace(";", "")
+                    tmp5 = tmp5.replace("(", "") # fixing up the data to read correctly
+                    tmp5 = tmp5.replace("\'", "\"") # fixing up the data to read correctly
+                    tmp5 = tmp5.replace(")", "") # fixing up the data to read correctly
+                    tmp5 = tmp5.replace(";", "") # fixing up the data to read correctly
                     outdata = tmp5
                     f.write("cout << " + outdata + ";\n")
                 if (data[0] == "return"):
@@ -124,8 +144,8 @@ if ext == "ky":
                         value = value.replace("(", "")
                         value = value.replace(")", "")
                         value = value.replace(";", "")
-                        value = int(value)
-                    except ValueError:
+                        value = int(value) # turn it into an int to make sure we're returning an int
+                    except ValueError: # if it isnt an int then return an error
                         error+=1
                         print(f"[{tcol.bold}{tcol.red}ERROR{tcol.reset}]: line " +tcol.bold+ str(i + 1) +tcol.reset+ ", file " +tcol.bold+filename+".ky"+tcol.reset+ " - '\33[4m" + " ".join(data) + "\33[0m'")
                         print(f"ValueError: type 'int' required, not {type(data[1])}")
@@ -143,8 +163,8 @@ if ext == "ky":
                         value = value.replace("(", "")
                         value = value.replace(")", "")
                         value = value.replace(";", "")
-                        value = int(value)
-                    except ValueError:
+                        value = int(value) # turn it into an int to make sure we're returning an int
+                    except ValueError: # if it isnt an int then return an error
                         error+=1
                         print(f"[{tcol.bold}{tcol.red}ERROR{tcol.reset}]: line " +tcol.bold+ str(i + 1) +tcol.reset+ ", file " +tcol.bold+filename+".ky"+tcol.reset+ " - '\33[4m" + " ".join(data) + "\33[0m'")
                         print(f"ValueError: type 'int' required, not {type(data[1])}")
@@ -159,26 +179,26 @@ if ext == "ky":
                 if (data[0] == "str"):
                     strname = data[1]
                     if (strname[-1] != ";"):
-                        pass
+                        pass # do nothing yet, too dumb to continue for now
                 if (data[0] == "int"):
                     intname = data[1]
                     if (intname[-1] != ";"):
                         intdata = data[3]
-                        if (";" not in intdata):
+                        if (";" not in intdata): # if there is no semiconon because there totally needs to be one:
                             error+=1
                             print(f"[{tcol.bold}{tcol.red}ERROR{tcol.reset}]: line " +tcol.bold+ str(i + 1) +tcol.reset+ ", file " +tcol.bold+filename+".ky"+tcol.reset+ " - '\33[4m" + " ".join(data) + "\33[0m'")
                             print("SyntaxError: int '" + intname + "' without semicolon")
                         intdata = intdata.replace(";", "")
-                        f.write("int " + intname + " = " + intdata + ";\n")
+                        f.write("int " + intname + " = " + intdata + ";\n") # add else
             if (data[0] not in stdlib):
-                if (data[0][0] == "/"):
-                    if (data[0][1] == "/"):
-                        pass
-                    else:
+                if (data[0][0] == "/"): # if there is a slash:
+                    if (data[0][1] == "/"): # if there is another slash:
+                        pass # do nothing because it's a comment
+                    else: # so it's not a comment
                         error+=1
                         print(f"[{tcol.bold}{tcol.red}ERROR{tcol.reset}]: line " +tcol.bold+ str(i + 1) +tcol.reset+ ", file " +tcol.bold+filename+".ky"+tcol.reset+ " - '\33[4m" + " ".join(data) + "\33[0m'")
                         print("FuncNotFoundError: func '" + data[0] + "' not defined")
-                else:
+                else: # no comment
                     error+=1
                     print(f"[{tcol.bold}{tcol.red}ERROR{tcol.reset}]: line " +tcol.bold+ str(i + 1) +tcol.reset+ ", file " +tcol.bold+filename+".ky"+tcol.reset+ " - '\33[4m" + " ".join(data) + "\33[0m'")
                     print("FuncNotFoundError: func '" + data[0] + "' not defined")
@@ -191,7 +211,7 @@ if ext == "ky":
             print(tcol.bold + "Terminating compilation." + tcol.reset)
             os.remove("/tmp/0.cpp")
             exit()
-        os.system("g++ /tmp/0.cpp -o ./" + filename)
+        os.system("g++ /tmp/0.cpp -o ./" + filename) # this is bad..who knows it the right compiler is on the right machine?
         os.system("chmod +x ./" + filename)
         # os.system("cat /tmp/0.cpp")
         os.remove("/tmp/0.cpp")
