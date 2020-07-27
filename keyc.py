@@ -11,6 +11,7 @@ Copyright Daniel Smith 2020.
 Any replication of this work will be reported.
 All rights reserved.
 """
+true = True; false = False; null = None
 class tcol:
     blue = '\033[34m'
     grn = '\033[32m'
@@ -49,30 +50,35 @@ stdlib = [
     "int"
 ]
 
-path = argv[1]
-filename = path.replace(".ky", "")
-
-if len(argv) != 2:
-    print("usage: keyc <filename>")
+try:
+    path = argv[1]
+except IndexError:
+    print("usage: keyc <filename> <optional - filename of compiled source>")
     exit()
 
-if path == "--version" or path == "-v":
+filename = path.replace(".ky", "")
+
+try:
+    filename = argv[2]
+except IndexError:
+    pass
+
+if (path == "--version" or path == "-v"):
     print(f"""{tcol.bold}Key Compiler (keyc) Version {version}
 Copyright Daniel Smith 2020.
 Any replication of this work will be reported.
 All rights reserved.{tcol.reset}""")
     exit()
-check = os.path.exists(path)
-if check == False:
+
+if (not os.path.exists(path)):
     print(f"[{tcol.red}{tcol.bold}ERROR{tcol.reset}]: file inputted does not exist!")
     exit()
+
 name = path.split(".")
 tmp = name[::-1]
 ext = tmp[0]
-if ext != "ky" or ext == "key":
-    print(f"[{tcol.red}{tcol.bold}ERROR{tcol.reset}]: file inputted is not a key file!")
-    exit()
-if ext == "ky": # FIX
+
+if (true): # FIXED // somewhat..
     with open(f"{path}", "r") as file: # FIX
         content = file.read().splitlines()
         i = 0
@@ -211,7 +217,8 @@ if ext == "ky": # FIX
             print(tcol.bold + "Terminating compilation." + tcol.reset)
             os.remove("/tmp/0.cpp")
             exit()
-        os.system("g++ /tmp/0.cpp -o ./" + filename) # this is bad..who knows it the right compiler is on the right machine?
+        os.system("g++ /tmp/0.cpp -o ./" + filename + " > .nobodycares") # this is bad..who knows if the right compiler is on the right machine?
+        os.remove(".nobodycares")
         os.system("chmod +x ./" + filename)
         # os.system("cat /tmp/0.cpp")
         os.remove("/tmp/0.cpp")
