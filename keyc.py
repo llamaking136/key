@@ -151,15 +151,14 @@ def main(filepath): # FIXED
             if (data[0] == "out"):
                 tmp2 = " ".join(data[1:]) # putting list into string to find data to print
                 ii = 0
-                tmp5 = list()
+                tmp5 = []
                 if (tmp2[0] != "("):
                     error+=1
                     print(f"[{tcol.bold}{tcol.red}ERROR{tcol.reset}]: line " +tcol.bold+ str(i + 1) +tcol.reset+ ", file " +tcol.bold+filename+".ky"+tcol.reset+ " - '\33[4m" + " ".join(data) + "\33[0m'")
                     throwError(errors[0][2], errors[1][1])
                     # exit(-1)
                 while (ii != len(tmp2)): # continusly going through the data to find it all, thanks to the semicolon
-                    tmp3 = tmp2[ii]
-                    tmp4 = "".join(tmp3[0])
+                    tmp4 = "".join(tmp2[ii][0])
                     tmp5.append(tmp4) # put the data into a string
                     if (tmp3 == ";"):
                         break # stops when it finds the semicolon
