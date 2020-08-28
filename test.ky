@@ -5,4 +5,5 @@ add <stdio.h>;
 // out ("hello, world\n" + hello + end);
 // in (hello);
 // return (0);
+out
 exit (0);

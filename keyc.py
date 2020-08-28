@@ -3,7 +3,7 @@
 import os
 from sys import argv
 
-version = "0.2.3"
+version = "0.2.5"
 
 about = f"""
 Key Compiler (keyc) Version {version}
@@ -65,12 +65,6 @@ def fatal(text, after = "terminateCompile()"):
 
 def throwError(exception, exceptText, data, line, isWarning = False):
     global error, warning
-    if (error >= 100 and warning >= 100):
-        fatal("too many errors and warnings, stopping")
-    if (warning >= 100):
-        fatal("too many warnings, stopping")
-    if (error >= 100):
-        fatal("too many errors, stopping")
     if (isWarning):
         warning+=1
         print(f"[{tcol.blue}{tcol.bold}WARNING{tcol.reset}]: line " +tcol.bold+ str(line + 1) +tcol.reset+ ", file " +tcol.bold+filename+".ky"+tcol.reset+ " - '\33[4m" + " ".join(data) + "\33[0m'")
@@ -85,7 +79,7 @@ stdlib = [
     "exit",
     "out",
     "return",
-    "str",
+    #"str",
     "int"
 ]
 
@@ -126,6 +120,8 @@ try:
 except PermissionError:
     fatal("current user does not have permission to view file inputted!")
 
+storage = {}
+
 file = open(path, "r")
 content = file.read().splitlines()
 i = 0
@@ -138,6 +134,12 @@ f.write("#include <string>\n")
 f.write("using namespace std;\n")
 f.write("int main() {\n")
 while (i != len(content)):
+    if (error >= 100 and warning >= 100):
+        fatal("too many errors and warnings, stopping")
+    if (warning >= 100):
+        fatal("too many warnings, stopping")
+    if (error >= 100):
+        fatal("too many errors, stopping")
     data = str(content[i])
     data = data.split()
     
