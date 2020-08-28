@@ -7,7 +7,7 @@ version = "0.2.3"
 
 about = f"""
 Key Compiler (keyc) Version {version}
-Copyright Daniel Smith 2020.
+Copyright llamaking136 2020.
 Any replication of this work will be reported.
 All rights reserved.
 """
