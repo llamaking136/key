@@ -6,18 +6,18 @@ from time import sleep
 
 version = "0.2.5"
 
-about = f"""
+aboutThis = f"""
 Key Compiler (keyc) Version {version}
 Copyright llamaking136 2020.
 Any replication of this work will be reported.
 All rights reserved.
 Licence: https://raw.githubusercontent.com/llamaking136/key/master/LICENSE
 """
-abouthelp = f"""
+aboutHelp = f"""
 Key Compiler (keyc)
 -o - use other output filename
--h - view (this) help page
--v - view version and about page
+-help - view (this) help page
+-version - view version and about page
 -save-temps - save the temporrary files used
 """
 
@@ -63,6 +63,14 @@ errors = [
     ]
 ]
 
+def about():
+    print(aboutThis)
+    exit()
+
+def thisHelp():
+    print(aboutHelp)
+    exit()
+
 def fatal(text, after = "terminateCompile()"):
     print(f"[{tcol.red}{tcol.bold}FATAL ERROR{tcol.reset}]: {text}")
     exec(after)
@@ -71,21 +79,23 @@ def throwError(exception, exceptText, data, line, isWarning = False):
     global error, warning
     if (isWarning):
         warning+=1
-        print(f"[{tcol.blue}{tcol.bold}WARNING{tcol.reset}]: line " +tcol.bold+ str(line + 1) +tcol.reset+ ", file " +tcol.bold+filename+".ky"+tcol.reset+ " - '\33[4m" + " ".join(data) + "\33[0m'")
+        print(f"[{tcol.blue}{tcol.bold}WARNING{tcol.reset}]: line " +tcol.bold+ str(line + 1) +tcol.reset+ ", file " +tcol.bold+filename+".ky"+tcol.reset+ " - '\33[4m" + data + "\33[0m'")
         print(exception + ": " + exceptText)
     if (not isWarning):
         error+=1
-        print(f"[{tcol.red}{tcol.bold}ERROR{tcol.reset}]: line " +tcol.bold+ str(line + 1) +tcol.reset+ ", file " +tcol.bold+filename+".ky"+tcol.reset+ " - '\33[4m" + " ".join(data) + "\33[0m'")
+        print(f"[{tcol.red}{tcol.bold}ERROR{tcol.reset}]: line " +tcol.bold+ str(line + 1) +tcol.reset+ ", file " +tcol.bold+filename+".ky"+tcol.reset+ " - '\33[4m" + data + "\33[0m'")
         print(exception + ": " + exceptText)
 
 stdlib = [
     "add",
     "exit",
     "out",
-    "return",
+    "return"
     #"str",
-    "int"
+    #"int"
 ]
+
+
 
 try:
     path = argv[1]
@@ -96,7 +106,6 @@ filestuff = path.split(".")
 filename = filestuff[0]
 extention = filestuff[-1]
 
-"""
 if ("-o" in argv): # do they want a different compiled output name?
     filename = argv[argv.index("-o") + 1]
 
@@ -105,18 +114,22 @@ SAVE_TEMPS = False
 if ("-save-temps" in argv): # do they want to save the temporrary files?
     SAVE_TEMPS = True
 
-if (path == "-version" or path == "-v"): # are they finding the version?
-    print(about)
-    exit()
+if ("-version" in argv): # are they finding the version?
+    about()
 
-if ("-help" in argv or "-h" in argv): # are they finding help?
-    print(abouthelp)
-    exit()
+if ("-help" in argv): # are they finding help?
+    thisHelp()
+
 """
-
-for i in argv:
-    if (i.startswith("-")):
-        if ()
+for ii in args:
+    for i in argv:
+        if (i.startswith("-")):
+            #if (i == ii):
+            if (i in args):
+                if ()
+            else:
+                fatal(i + ": unknown argument!")
+"""
 
 if (not os.path.exists(path)): # does the file exist?
     fatal("file inputted does not exist!")
@@ -137,9 +150,26 @@ comment = "//" # was "#"
 file = open(path)
 content = file.read().splitlines()
 
+finalData = ["#include <iostream>\n", "int main() {\n"]
+
 # to remove comments
 for ii in range(0, len(content)):
     for i in content:
         if (i.startswith(comment)):
             content.remove(i)
 
+for i in content:
+    for ii in stdlib:
+        if (i.startswith(ii)):
+            if (i.startswith("out")):
+                data = i.split("(")
+                del data[0]
+                notTrimmed = data[0]
+                del data[0]
+                data = notTrimmed.replace(")", "")
+                data = data.replace(";", "")
+                data = data.replace("+", "<<")
+                finalData.append("cout << " + data + ";\n")
+        else:
+            throwError(errors[0][4], f"function '{i}' was not found", i, content.index(i))
+            continue

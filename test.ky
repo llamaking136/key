@@ -1,8 +1,8 @@
-add <stdio.h>;
+// dd <stdio.h>;
 // str hello = "hello, world\n";
 // int hello = 21;
 // str ree = "help me";
-// out ("hello, world\n" + hello + end);
+out("hello, world\n" + hello + end);
 // in (hello);
 // return (0);
-exit (0);
+// exit (0);
