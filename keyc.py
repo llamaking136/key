@@ -2,6 +2,9 @@
 
 import os
 from sys import argv
+import sys
+
+printf = sys.stdout.write
 
 version = "0.2.5"
 
@@ -14,8 +17,8 @@ All rights reserved.
 abouthelp = f"""
 Key Compiler (keyc)
 -o - use other output filename
--h/--help - view help page
--v/--version - view version and about page
+-help - view help page
+-version - view version and about page
 -save-temps - save the temporrary files used
 """
 
@@ -88,22 +91,37 @@ try:
 except IndexError:
     fatal("no file inputted!")
 
-ext = path.split(".")
-filename = ext[0]
+filepath = path.split(".")
+filename = filepath[0]
+ext = filepath[-1]
 
 if ("-o" in argv):
     filename = argv[argv.index("-o") + 1]
+
+if (os.path.exists(filename)):
+    thingy = True
+    while (thingy):
+        printf(f"[{tcol.blue}{tcol.bold}WARNING{tcol.reset}]: file '{filename}' exists. override?\a ")
+        override = input()
+        if (override.lower() == "y"):
+            thingy = False
+            break
+        elif (override.lower() == "n"):
+            thingy = False
+            exit()
+        else:
+            printf(f"[{tcol.red}{tcol.bold}ERROR{tcol.reset}]: please type 'y' or 'n'\n")
 
 SAVE_TEMPS = False
 
 if ("-save-temps" in argv):
     SAVE_TEMPS = True
 
-if (path == "--version" or path == "-v"):
+if ("-version" in argv):
     print(about)
     exit()
 
-if ("--help" in argv or "-h" in argv):
+if ("-help" in argv):
     print(abouthelp)
     exit()
 
@@ -176,7 +194,7 @@ while (i != len(content)):
             while (ii != len(tmp2)): # continusly going through the data to find it all, thanks to the semicolon
                 tmp4 = "".join(tmp2[ii][0])
                 tmp5.append(tmp4) # put the data into a string
-                if (tmp3 == ";"):
+                if (tmp4 == ";"):
                     break # stops when it finds the semicolon
                 ii+=1
             tmp5 = "".join(tmp5) # combine it all to turn it into a string

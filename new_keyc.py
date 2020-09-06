@@ -148,9 +148,10 @@ storage = {}
 comment = "//" # was "#"
 
 file = open(path)
-content = file.read().splitlines()
+content = file.read()
+content = content.split(";")
 
-finalData = ["#include <iostream>\n", "int main() {\n"]
+finalData = ["#include <iostream>\n", "using namespace std;\n", "int main() {\n"]
 
 # to remove comments
 for ii in range(0, len(content)):
@@ -158,6 +159,7 @@ for ii in range(0, len(content)):
         if (i.startswith(comment)):
             content.remove(i)
 
+"""
 for i in content:
     for ii in stdlib:
         if (i.startswith(ii)):
@@ -173,3 +175,7 @@ for i in content:
         else:
             throwError(errors[0][4], f"function '{i}' was not found", i, content.index(i))
             continue
+"""
+
+for line in content:
+    print(line)
