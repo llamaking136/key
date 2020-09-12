@@ -5,13 +5,13 @@ from sys import argv
 import sys
 
 printf = sys.stdout.write
-
+printerr = sys.stderr.write
 version = "0.2.5"
 
 about = f"""
 Key Compiler (keyc) Version {version}
 Copyright llamaking136 2020.
-Any replication of this work will be reported.
+Any replication of this work will not be tolerated.
 All rights reserved.
 """
 abouthelp = f"""
@@ -27,14 +27,16 @@ error = 0
 warning = 0
 
 def terminateCompile():
-    print(tcol.bold + "Terminating compilation." + tcol.reset)
+    printerr(tcol.bold + "Terminating compilation." + tcol.reset + "\n")
     try:
         os.remove("/tmp/0.cpp")
     except FileNotFoundError:
         pass
     exit()
 
-true = True; false = False; null = None
+def breakTokens(data):
+    data = data.split(";")
+
 class tcol:
     blue = '\033[34m'
     grn = '\033[32m'
@@ -63,27 +65,27 @@ errors = [
 ]
 
 def fatal(text, after = "terminateCompile()"):
-    print(f"[{tcol.red}{tcol.bold}FATAL ERROR{tcol.reset}]: {text}")
+    printerr(f"[{tcol.red}{tcol.bold}FATAL ERROR{tcol.reset}]: {text}\n")
     exec(after)
 
 def throwError(exception, exceptText, data, line, isWarning = False):
     global error, warning
     if (isWarning):
         warning+=1
-        print(f"[{tcol.blue}{tcol.bold}WARNING{tcol.reset}]: line " +tcol.bold+ str(line + 1) +tcol.reset+ ", file " +tcol.bold+filename+".ky"+tcol.reset+ " - '\33[4m" + " ".join(data) + "\33[0m'")
-        print(exception + ": " + exceptText)
+        printerr(f"[{tcol.blue}{tcol.bold}WARNING{tcol.reset}]: line " +tcol.bold+ str(line + 1) +tcol.reset+ ", file " +tcol.bold+filename+".ky"+tcol.reset+ " - '\33[4m" + " ".join(data) + "\33[0m'" + "\n")
+        printerr(exception + ": " + exceptText + "\n")
     if (not isWarning):
         error+=1
-        print(f"[{tcol.red}{tcol.bold}ERROR{tcol.reset}]: line " +tcol.bold+ str(line + 1) +tcol.reset+ ", file " +tcol.bold+filename+".ky"+tcol.reset+ " - '\33[4m" + " ".join(data) + "\33[0m'")
-        print(exception + ": " + exceptText)
+        printerr(f"[{tcol.red}{tcol.bold}ERROR{tcol.reset}]: line " +tcol.bold+ str(line + 1) +tcol.reset+ ", file " +tcol.bold+filename+".ky"+tcol.reset+ " - '\33[4m" + " ".join(data) + "\33[0m'" + "\n")
+        printerr(exception + ": " + exceptText + "\n")
 
 stdlib = [
     "add",
     "exit",
     "out",
-    "return",
+    "return"#,
     #"str",
-    "int"
+    #"int"
 ]
 
 try:
@@ -346,5 +348,4 @@ if (not SAVE_TEMPS):
 elif (SAVE_TEMPS):
     os.system("mv /tmp/0.cpp .")
 file.close()
-exit(0)
-
+exit()

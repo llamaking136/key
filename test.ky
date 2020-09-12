@@ -3,6 +3,7 @@
 // int hello = 21;
 // str ree = "help me";
 out ("hello, world\n" + end);
+new
 // in (hello);
 // return (0);
 // exit (0);
