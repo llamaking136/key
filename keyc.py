@@ -6,7 +6,7 @@ import sys
 
 printf = sys.stdout.write
 printerr = sys.stderr.write
-version = "0.2.5"
+version = "0.2.7"
 
 about = f"""
 Key Compiler (keyc) Version {version}
@@ -27,7 +27,7 @@ error = 0
 warning = 0
 
 def terminateCompile():
-    printerr(tcol.bold + "Terminating compilation." + tcol.reset + "\n")
+    printerr("Terminating compilation." + "\n")
     try:
         os.remove("/tmp/0.cpp")
     except FileNotFoundError:
@@ -46,7 +46,7 @@ class tcol:
     bold = '\033[1m'
     undl = '\033[4m'
 
-packages = ["stdio.h", "std.jm", "syn.jm"]
+packages = ["std.jm", "syn.jm"]
 
 errors = [
     [
@@ -65,18 +65,18 @@ errors = [
 ]
 
 def fatal(text, after = "terminateCompile()"):
-    printerr(f"[{tcol.red}{tcol.bold}FATAL ERROR{tcol.reset}]: {text}\n")
+    printerr(f"[{tcol.red}FATAL ERROR{tcol.reset}]: {text}\n")
     exec(after)
 
 def throwError(exception, exceptText, data, line, isWarning = False):
     global error, warning
     if (isWarning):
         warning+=1
-        printerr(f"[{tcol.blue}{tcol.bold}WARNING{tcol.reset}]: line " +tcol.bold+ str(line + 1) +tcol.reset+ ", file " +tcol.bold+filename+".ky"+tcol.reset+ " - '\33[4m" + " ".join(data) + "\33[0m'" + "\n")
+        printerr(f"[{tcol.blue}WARNING{tcol.reset}]: line " + str(line + 1) + ", file " + filename + ".ky - '\33[4m" + " ".join(data) + "\33[0m'" + "\n")
         printerr(exception + ": " + exceptText + "\n")
     if (not isWarning):
         error+=1
-        printerr(f"[{tcol.red}{tcol.bold}ERROR{tcol.reset}]: line " +tcol.bold+ str(line + 1) +tcol.reset+ ", file " +tcol.bold+filename+".ky"+tcol.reset+ " - '\33[4m" + " ".join(data) + "\33[0m'" + "\n")
+        printerr(f"[{tcol.red}ERROR{tcol.reset}]: line " + str(line + 1) + ", file " + filename + ".ky - '\33[4m" + " ".join(data) + "\33[0m'" + "\n")
         printerr(exception + ": " + exceptText + "\n")
 
 stdlib = [
@@ -103,16 +103,16 @@ if ("-o" in argv):
 if (os.path.exists(filename)):
     thingy = True
     while (thingy):
-        printf(f"[{tcol.blue}{tcol.bold}WARNING{tcol.reset}]: file '{filename}' exists. override?\a ")
+        printerr(f"[{tcol.blue}WARNING{tcol.reset}]: file '{filename}' exists. override?\a ")
         override = input()
         if (override.lower() == "y"):
             thingy = False
             break
         elif (override.lower() == "n"):
             thingy = False
-            exit()
+            terminateCompile()
         else:
-            printf(f"[{tcol.red}{tcol.bold}ERROR{tcol.reset}]: please type 'y' or 'n'\n")
+            printerr(f"[{tcol.red}ERROR{tcol.reset}]: please type 'y' or 'n'\n")
 
 SAVE_TEMPS = False
 
@@ -145,7 +145,6 @@ storage = {}
 file = open(path, "r")
 content = file.read().splitlines()
 i = 0
-tmp0 = 0
 f = open("/tmp/0.cpp", "w")
 f.write("#include <iostream>\n")
 f.write("#include <stdlib.h>\n")
@@ -180,7 +179,7 @@ while (i != len(content)):
             """
             if (modadd == "syn.jm" or modadd == "std.jm"):
                 throwError(errors[0][5], errors[1][0], data = data, line = i, isWarning = True)
-            if (modadd == "stdio.h"):
+            if ("stdio" in modadd):
                 throwError(errors[0][5], "nice, but this isn't C", data = data, line = i, isWarning = True)
             if (modadd not in packages):
                 throwError(errors[0][4], errors[1][2], data = data, line = i)
@@ -189,10 +188,7 @@ while (i != len(content)):
             ii = 0
             tmp5 = []
             if (tmp2[0] != "("):
-                error+=1
-                print(f"[{tcol.bold}{tcol.red}ERROR{tcol.reset}]: line " +tcol.bold+ str(i + 1) +tcol.reset+ ", file " +tcol.bold+filename+".ky"+tcol.reset+ " - '\33[4m" + " ".join(data) + "\33[0m'")
-                throwError(errors[0][2], errors[1][1])
-                # exit(-1)
+                throwError(errors[0][2], errors[1][1], data = data, line = i)
             while (ii != len(tmp2)): # continusly going through the data to find it all, thanks to the semicolon
                 tmp4 = "".join(tmp2[ii][0])
                 tmp5.append(tmp4) # put the data into a string
@@ -227,9 +223,7 @@ while (i != len(content)):
                 value = value.replace(";", "")
                 value = int(value) # turn it into an int to make sure we're returning an int
             except ValueError: # if it isnt an int then return an error
-                error+=1
-                print(f"[{tcol.bold}{tcol.red}ERROR{tcol.reset}]: line " +tcol.bold+ str(i + 1) +tcol.reset+ ", file " +tcol.bold+filename+".ky"+tcol.reset+ " - '\33[4m" + " ".join(data) + "\33[0m'")
-                print(f"ValueError: type 'int' required, not {type(data[1])}")
+                throwError("ValueError", "can only return type 'int' for now", data = data, line = i)
             
             """
             if (type(value) != int):
@@ -319,24 +313,14 @@ while (i != len(content)):
     i+=1
 f.write("}")
 f.close()
-# print(filename)
-if (error >= 100 and warning >= 100):
-    print(f"[{tcol.bold}{tcol.red}FATAL ERROR{tcol.reset}]: too many errors and warnings, just stopping")
-    terminateCompile()
-if (warning >= 100):
-    print(f"[{tcol.bold}{tcol.red}FATAL ERROR{tcol.reset}]: too many warnings, just stopping")
-    terminateCompile()
-if (error >= 100):
-    print(f"[{tcol.bold}{tcol.red}FATAL ERROR{tcol.reset}]: too many errors, just stopping")
-    terminateCompile()
 tmpreee = False
 if (error != 0 and warning != 0):
-    print("\n" + str(warning) + " warning(s) and " + str(error) + " error(s).")
+    printerr("\n" + str(warning) + " warning(s) and " + str(error) + " error(s).\n")
     tmpreee = True
 if (warning != 0 and not tmpreee):
-    print("\n" + str(warning) + " warning(s).")
+    printerr("\n" + str(warning) + " warning(s).\n")
 if (error != 0 and not tmpreee):
-    print("\n" + str(error) + " errors(s).")
+    printerr("\n" + str(error) + " errors(s).\n")
 if (error >= 1):
     terminateCompile()
 os.system("g++ /tmp/0.cpp -o ./" + filename + " > .nobodycares") # this is bad..who knows if the right compiler is on the right machine?
