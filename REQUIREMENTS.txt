@@ -1,3 +1,0 @@
-Required to use keyc: Python 3.7+, g++
-
-Download here: www.python.org/downloads/ gcc.gnu.org/install/

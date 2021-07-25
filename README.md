@@ -1,11 +1,10 @@
 # key
-I'm making a programming language. I'ts called 'Key'.
+Welcome to key, the programming language.
 
-Basically, I wanted a programming language like Python, but the compilabillity of C++.
-I tried compiling Python code, but it's just some kind of encryption, and it still requires the modules there.
+## What is key?
+key is a programming language created on June 17, 2020. It was abandoned later that year due to boredom and other projects.
+It was later revived on July 24, 2021.
 
-So I said, "Hey! What if I created my own programming language?"
-
-The compiler works by reading the inputted file, writing to a C++ file, compiling the C++ file, and there you go!
-
-Hope this goes farther than I excpect.
+## What happened to it?
+Since key has been abandoned, I've focused on other projects and learning other topics.
+Recently, I've been reviving another dead language, stupid. I really don't like the name and I think it might be better as key.
