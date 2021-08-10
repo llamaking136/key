@@ -25,7 +25,8 @@ limitations under the License.
 #include <string>
 #include <cstring>
 #include <sstream>
-#include "../source/parser.hpp"
+#include <fstream>
+#include <sys/stat.h>
 #include "../source/error.hpp"
 
 namespace lib {

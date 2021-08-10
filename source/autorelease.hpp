@@ -32,6 +32,7 @@
 #define AUTORELEASE_HPP
 
 #include <vector>
+#include <iostream>
 
 class AutoreleasePool {
 	private:

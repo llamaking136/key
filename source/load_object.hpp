@@ -46,9 +46,15 @@
 extern const char* KEY_LIB_SYMBOLS[]; // XXX: future feature
 #endif // KEY_LIB
 
-extern std::vector<void*> loaded_objects;
+struct Library {
+	std::string name;
+	void* handle;
+};
+
+extern std::vector<Library> loaded_objects;
 
 void* load_symbol(const char*, const char*);
+// void (*)() load_function(const char*, const char*);
 void close_libs();
 
 #endif // LOAD_OBJECT_HPP

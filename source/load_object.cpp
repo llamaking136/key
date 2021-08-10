@@ -30,29 +30,62 @@
 
 #include "load_object.hpp"
 
-std::vector<void*> loaded_objects = {};
+std::vector<Library> loaded_objects = {};
 
-void* load_symbol(const char* lib_name, const char* symbol_name) {
-	void* lib = dlopen(lib_name, RTLD_LAZY);
-	if (lib == NULL) {
-		error::error("could not load the library " + std::string(lib_name) + ", errno: " + std::to_string(errno));
-		return nullptr;
+bool lib_already_loaded(std::string name) {
+	for (unsigned long i = 0; i < loaded_objects.size(); i++) {
+		if (loaded_objects[i].name == name) return true;
+	}
+	return false;
+}
+
+long get_library_index(std::string name) {
+	for (unsigned long i = 0; i < loaded_objects.size(); i++) {
+		if (loaded_objects[i].name == name) return i;
+	}
+	return -1;
+}
+
+void* load_symbol(const char* symbol_name, const char* lib_name) {
+	void* lib;
+	bool lib_is_loaded = false;
+	if (lib_already_loaded(std::string(lib_name))) {
+		lib_is_loaded = true;
+		lib = loaded_objects[get_library_index(std::string(lib_name))].handle;
+	} else {
+		lib = dlopen(lib_name, RTLD_LAZY);
+		if (lib == NULL) {
+			error::error("could not load the library " + std::string(lib_name) + ": \33[31m" + std::string(dlerror()) + "\33[0m");
+			return nullptr;
+		}
 	}
 
 	void* symbol = dlsym(lib, symbol_name);
 	if (symbol == NULL) {
-		error::error("could not load the symbol " + std::string(symbol_name) + ", errno: " + std::to_string(errno));
+		error::error("could not load the symbol " + std::string(symbol_name) + ": \33[1m" + std::string(dlerror()) + "\33[0m");
 		dlclose(lib);
 		return nullptr;
 	}
-	
-	loaded_objects.push_back(lib);
+	if (lib_is_loaded) {
+		std::cout << "Loaded symbol" << symbol_name << "\n";
+		goto _return;
+	}
 
+	loaded_objects.push_back(Library{ std::string(lib_name), lib });
+
+	std::cout << "Loaded symbol " << symbol_name << " and " << lib_name << "\n";
+
+_return:
 	return symbol;
 }
 
+// void (*)() load_function(const char* function_name, const char* lib_name) {
+//	return reinterpret_cast<void (*)()>load_symbol(function_name, lib_name);
+// }
+
 void close_libs() {
 	for (unsigned long i; i < loaded_objects.size(); i++) {
-		dlclose(loaded_objects[i]);
+		std::cout << "Closing library " << loaded_objects[i].name << "\n";
+		dlclose(loaded_objects[i].handle);
 	}
 }

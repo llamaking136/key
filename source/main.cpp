@@ -33,7 +33,7 @@
 #if defined(MS_WINDOWS)
 // # error WINDOWS SUCKS!!!
 // Okay, maybe I shouldn't be too hard on the people who can't afford Linux
-# error Me no like windows
+# error Sorry, Windows isn't supported by key
 #endif // MS_WINDOWS
 
 bool save_compiled_bytecode = false;
@@ -61,6 +61,7 @@ int main(int argc, char** argv) {
 
     TokenArr tokens = lexer::Lexer(filename, filedata);
 
+	// TODO: make this in the pre-proccessor
 	if (DEBUG_MODE)
 		goto printTokens;
 	else
