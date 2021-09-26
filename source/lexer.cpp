@@ -34,6 +34,30 @@ bool contains(char to, std::string base) {
 	return base.find(to) != std::string::npos;
 }
 
+void format(char* res, const char *fmt, ...) {
+	va_list args;
+	va_start(args, fmt);
+	vsprintf(res, fmt, args);
+	va_end(args);
+}
+
+std::string str_repr(std::string main) {
+	std::string result;
+
+	char* buffer = new char[1024]; // Have a kilobye just in case we make a memory leak.
+	for (unsigned int i = 0; i < main.length(); i++) {
+		if (main[i] < 32 || main[i] > 126) {
+			format(buffer, "%x", main[i]);
+			result += "\\x";
+			result += buffer;
+		} else {
+			result += main[i];
+		}
+	}
+	delete buffer;
+	return result;
+}
+
 namespace lexer {
 
 std::vector<std::string> splitBy(std::string base, char by) {
@@ -81,6 +105,12 @@ TokenArr Lexer(std::string filename, std::string filedata) {
 		cur_chr = filedata[pos];
 		current_line = filedataArr[line];
 
+		/*
+		std::cout << "cur_chr: " << cur_chr << "\n";
+		std::cout << "is_str: " << is_str << "\n";
+		std::cout << "is_name: " << is_name << "\n\n";
+		*/
+		
 		// comment handling
 		if (!is_com && cur_chr == '/' && filedata[pos + 1] == '*') { // begining of comments
 			is_com = true;
@@ -124,6 +154,12 @@ TokenArr Lexer(std::string filename, std::string filedata) {
 		} else if (is_char) { // during char
 			l_pos++;
 			continue;
+		}
+	
+		// We do this because when we put an identifier in front of a string,
+		// the lexer puts the string first in the token array.
+		if (!strchr(LETTERS, cur_chr) && is_name) { // ident end
+			goto _ident_end;
 		}
 
 		// strings
@@ -218,6 +254,7 @@ TokenArr Lexer(std::string filename, std::string filedata) {
 			continue;
 		}
 		if (!strchr(LETTERS, cur_chr) && is_name) { // ident end
+_ident_end:
 			if (strchr(DIGITS, cur_chr) && cur_chr != '.') {
 				name_str += cur_chr;
 				continue;

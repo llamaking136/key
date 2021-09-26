@@ -33,14 +33,22 @@
 AutoreleasePool::AutoreleasePool() {}
 
 AutoreleasePool::~AutoreleasePool() {
+	this->drain();
+}
+
+unsigned long AutoreleasePool::size() {
+	return this->releaseFunctions.size();
+}
+
+void AutoreleasePool::appendReleaseFunction(void (*function)()) {
+	this->releaseFunctions.push_back(function);
+}
+
+void AutoreleasePool::drain() {
 	void (*current_release_function)();
 
 	for (unsigned long i = 0; i < this->releaseFunctions.size(); i++) {
 		current_release_function = this->releaseFunctions[i];
 		current_release_function();
 	}
-}
-
-void AutoreleasePool::appendReleaseFunction(void (*function)()) {
-	this->releaseFunctions.push_back(function);
 }

@@ -40,7 +40,7 @@
 #include <utility>
 #include <map>
 #include <unordered_map>
-#include <stdlib.h>
+#include <cstdarg>
 
 #define DIGITS "0123456789."
 #define LETTERS "qwertyuiopasdfghjklzxcvbnmQWERTYUIOPASDFGHJKLZXCVBNM_"
@@ -51,6 +51,8 @@ typedef std::vector<Token> TokenArr;
 typedef std::vector<std::pair<std::string, TokenType> > TokenExpr;
 
 bool contains(char, std::string);
+
+std::string str_repr(std::string);
 
 namespace lexer {
 

@@ -1,7 +1,7 @@
 //
-// autorelease.hpp
+// parser.hpp
 //
-// created at 24/07/2021 17:45:13
+// created at 26/09/2021 13:12:57
 // written by llamaking136
 //
 
@@ -28,21 +28,11 @@
 // SOFTWARE.
 
 
-#if !defined(AUTORELEASE_HPP)
-#define AUTORELEASE_HPP
+#if !defined(PARSER_HPP)
+#define PARSER_HPP
 
-#include <vector>
-#include <iostream>
+namespace parser {
+	void Parser();
+}
 
-class AutoreleasePool {
-	private:
-		std::vector<void (*)()> releaseFunctions;
-	public:
-		 AutoreleasePool();
-		~AutoreleasePool();
-		unsigned long size();
-		void appendReleaseFunction(void (*)());
-		void drain();
-};
-
-#endif // AUTORELEASE_HPP
+#endif // PARSER_HPP

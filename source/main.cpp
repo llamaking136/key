@@ -31,15 +31,16 @@
 #include "main.hpp"
 
 #if defined(MS_WINDOWS)
-// # error WINDOWS SUCKS!!!
-// Okay, maybe I shouldn't be too hard on the people who can't afford Linux
-# error Sorry, Windows isn't supported by key
+# error Windows is not supported by key yet, try linux instead
 #endif // MS_WINDOWS
+
+AutoreleasePool global_pool;
 
 bool save_compiled_bytecode = false;
 
 void pool_drain() {
 	close_libs();
+	std::cout << "done\n";
 }
 
 int usage() {
@@ -48,8 +49,8 @@ int usage() {
 }
 
 int main(int argc, char** argv) {
-	AutoreleasePool pool;
-	pool.appendReleaseFunction(pool_drain);
+	global_pool = AutoreleasePool();
+	global_pool.appendReleaseFunction(pool_drain);
 
     int return_value = parseargs(argc, argv);
     if (return_value != 0) {
@@ -61,25 +62,23 @@ int main(int argc, char** argv) {
 
     TokenArr tokens = lexer::Lexer(filename, filedata);
 
-	// TODO: make this in the pre-proccessor
-	if (DEBUG_MODE)
-		goto printTokens;
-	else
-		goto afterPrintTokens;
-
-printTokens:
+#if DEBUG_MODE
 	if (tokens.size()) {
 		std::cout << "tokens:\n";
 	}
     for (Token x: tokens) {
-        std::cout << "'" << x.data << "' -> " << lexer::tokenMap[x.type] << ", line " << x.line << " on char " << x.pos << "\n";
+		if (x.type == STR_VALUE) {
+			std::cout << "'" << str_repr(x.data) << "' -> " << lexer::tokenMap[x.type] << ", line " << x.line << " on char " << x.pos << "\n";
+		} else {
+        	std::cout << "'" << x.data << "' -> " << lexer::tokenMap[x.type] << ", line " << x.line << " on char " << x.pos << "\n";
+		}
     }
 	if (tokens.size()) {
 		std::cout << "\n";
 	}
-afterPrintTokens:
+#endif // DEBUG_MODE
 
 	// std::vector<parser::statement> statements = parser::Parser(tokens, filedata, filename, true);
 
-    return 0;
+    return return_value;
 }

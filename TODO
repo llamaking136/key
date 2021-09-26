@@ -1,6 +1,6 @@
 [ ]: Finish parser
-[ ]: Add actual types in the parser, like what builtin functions are
+[ ]: Add custom types in the parser, like what builtin functions are
 [ ]: Add more syntax information
-[ ]: Fix chars where it can't pick up and parse a backslashed character
+[X]: Fix chars where it can't pick up and parse a backslashed character
 [ ]: Fix strings where it can't parse hex and octal
 [ ]: Finish this list

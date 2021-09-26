@@ -44,6 +44,8 @@
 #include "load_object.hpp"
 #include "autorelease.hpp"
 
+extern AutoreleasePool global_pool;
+
 extern bool save_compiled_bytecode;
 
 int usage();
