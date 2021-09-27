@@ -1,7 +1,7 @@
 //
-// main.hpp
+// action.hpp
 //
-// created at 24/07/2021 15:12:02
+// created at 26/09/2021 18:08:46
 // written by llamaking136
 //
 
@@ -28,26 +28,133 @@
 // SOFTWARE.
 
 
-#if !defined(MAIN_HPP)
-#define MAIN_HPP
+#if !defined(ACTION_HPP)
+#define ACTION_HPP
 
-#include <lib.hpp>
-#include <string>
-#include <unordered_map>
-#include <algorithm>
-
-#include "lexer.hpp"
-#include "parser.hpp"
-#include "args.hpp"
 #include "token.hpp"
-#include "version.hpp"
-#include "load_object.hpp"
-#include "autorelease.hpp"
 
-extern AutoreleasePool global_pool;
+namespace Action {
 
-extern bool save_compiled_bytecode;
+enum ActionType { // XXX: Remove unnessicary stuff.
+	BOOL_TYPE,
+	CHAR_TYPE,
+	INT_TYPE,
+	FLOAT_TYPE,
+	STR_TYPE,
+	CUSTOM_TYPE,
 
-int usage();
+	IDENTIFIER,
 
-#endif // MAIN_HPP
+	ASSIGN,
+
+	BOOL_VALUE,
+	CHAR_VALUE,
+	INT_VALUE,
+	FLOAT_VALUE,
+	STR_VALUE,
+	NULL_VALUE,
+	CUSTOM_VALUE,
+
+	PLUS_EQUALS,
+	MINUS_EQUALS,
+	DIVIDE_EQUALS,
+	TIMES_EQUALS,
+	MOD_EQUALS,
+
+	PLUS,
+	MINUS,
+	DIVIDE,
+	TIMES,
+	MOD,
+
+	GREATER,
+	SMALLER,
+	GREATER_EQUAL,
+	SMALLER_EQUAL,
+
+	NOT,
+	OR,
+	AND,
+
+	BIT_OR,
+	BIT_AND,
+	BIT_XOR,
+	BIT_NOT,
+	BIT_SHIFT_L,
+	BIT_SHIFT_R,
+
+	POWER_OF,
+
+	EQUALS,
+	NOT_EQUALS,
+
+	OPEN_BRACKET,
+	CLOSE_BRACKET,
+	
+	OPEN_SQUARE,
+	CLOSE_SQUARE,
+
+	OPEN_CURLY,
+	CLOSE_CURLY,
+
+	IF,
+	ELSEIF,
+	ELSE,
+
+	RETURN,
+
+	WHILE,
+	FOR,
+
+	COMMA,
+	SEMICOLON,
+
+	COLON,
+	KEYWORD,
+
+	EOL,
+	_EOF,
+
+	INCLUDE,
+
+	FUNCDEF,
+
+	STRUCTDEF,
+
+	NAMESPACE,
+
+	TRUE_T,
+	FALSE_T,
+
+	DOT_OP,
+	ARROW_OP,
+
+	VAR_ASSIGN,
+
+	CONST_ASSIGN,
+
+	NUM_RANGE,
+
+	CONTINUE,
+	BREAK,
+
+	NEW,
+	AUTO,
+
+	TRY,
+	CATCH,
+	THROW,
+
+	TYPEOF,
+	SIZEOF,
+
+	FUNC_CALL,
+	METHOD_CALL,
+
+
+	_NULL // XXX: do not remove!
+};
+
+}
+
+#endif // ACTION_HPP

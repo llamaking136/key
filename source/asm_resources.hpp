@@ -1,7 +1,7 @@
 //
-// main.hpp
+// asm_resources.hpp
 //
-// created at 24/07/2021 15:12:02
+// created at 26/09/2021 20:49:13
 // written by llamaking136
 //
 
@@ -28,26 +28,27 @@
 // SOFTWARE.
 
 
-#if !defined(MAIN_HPP)
-#define MAIN_HPP
+#if !defined(ASM_RESOURCES_HPP)
+#define ASM_RESOURCES_HPP
 
-#include <lib.hpp>
-#include <string>
-#include <unordered_map>
-#include <algorithm>
+namespace ASM {
+	enum ASM_Symbols {
+		MOV = 0x1,
+		
+		ADD = 0x2,
+		SUB = 0x3,
+		MUL = 0x4,
+		DIV = 0x5,
 
-#include "lexer.hpp"
-#include "parser.hpp"
-#include "args.hpp"
-#include "token.hpp"
-#include "version.hpp"
-#include "load_object.hpp"
-#include "autorelease.hpp"
+		CALL = 0x6,
 
-extern AutoreleasePool global_pool;
+		CMP = 0x7,
 
-extern bool save_compiled_bytecode;
+		PUSHARG = 0x8,
 
-int usage();
 
-#endif // MAIN_HPP
+		HLT = 0xFF
+	};
+}
+
+#endif // ASM_RESOURCES_HPP

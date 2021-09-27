@@ -727,6 +727,7 @@ const char* tokenMap[] = {
 	"int type",
 	"float type",
 	"string type",
+	"custom structure type",
 
 	"variable",
 
@@ -746,6 +747,7 @@ const char* tokenMap[] = {
 	"float value",
 	"string value",
 	"null value",
+	"custom structure value",
 
 	"plus eaq",
 	"minus eaq",

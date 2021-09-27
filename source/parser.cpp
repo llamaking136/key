@@ -31,5 +31,12 @@
 #include "parser.hpp"
 
 namespace parser {
-	void Parser() {};
+	Statements Parser(std::string filename, std::string filedata, TokenArr Tokens) {
+		Statements result;
+
+		std::vector<std::string> filedataArr = lexer::splitBy(filedata, '\n');
+		std::string current_line;
+
+		return result;
+	};
 }

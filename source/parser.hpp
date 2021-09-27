@@ -31,8 +31,26 @@
 #if !defined(PARSER_HPP)
 #define PARSER_HPP
 
+#include <string>
+#include <vector>
+
+#include "token.hpp"
+#include "action.hpp"
+#include "lexer.hpp"
+
 namespace parser {
-	void Parser();
+	struct Statement {
+		TokenArr tokens;
+		Action::ActionType action;
+		std::string* data;
+		LineNo pos;
+		LineNo line;
+		std::string filename;
+	};
+
+	typedef std::vector<Statement> Statements;
+
+	Statements Parser(std::string, std::string, TokenArr);
 }
 
 #endif // PARSER_HPP

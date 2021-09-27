@@ -78,7 +78,7 @@ int main(int argc, char** argv) {
 	}
 #endif // DEBUG_MODE
 
-	// std::vector<parser::statement> statements = parser::Parser(tokens, filedata, filename, true);
+	parser::Statements statements = parser::Parser(filename, filedata, tokens);
 
     return return_value;
 }
